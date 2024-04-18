@@ -69,7 +69,9 @@ namespace login_register
         {
 
             SignUp signUp = new SignUp();
+            this.Hide();
             signUp.ShowDialog();
+            this.Show();
         }
 
         private void chkShowPassword_CheckedChanged(object sender, EventArgs e)
