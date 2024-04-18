@@ -1,4 +1,4 @@
-﻿using FireSharp.Config;
+using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
 using System;
@@ -46,31 +46,34 @@ namespace login_register
         }
         private async void btnSignUp_Click(object sender, EventArgs e)
         {
-            string username = txtUser.Text;
-            string password = txtPass.Text;
-            int userid = currentUserId;
+            int birthYear;
+            if (!int.TryParse(birth.Text, out birthYear))
+            {
+                             MessageBox.Show("Thông tin không hợp lệ !");
+                return;
+            }
+
+            // Sử dụng biến birthYear trong đối tượng UserData
             
+
             UserData userData = new UserData()
             {
                 username = txtUser.Text,
                 password = txtPass.Text,
                 userid = currentUserId,
-                
+                realname = realname.Text,
+                gender = cmbGender.SelectedItem.ToString(),                
             };
-            
+            userData.birthday = birthYear;
+
             // Xác thực thông tin đăng ký
-            if (!IsValidSignUp(username, password))
+            if (!IsValidSignUp(userData.username, userData.password))
             {
                 MessageBox.Show("Thông tin đăng ký không hợp lệ!");
                 return;
             }
-            FirebaseResponse usernameResponse = await client.GetAsync("users/" + username);
-            if (usernameResponse.Body != "null")
-            {
-                MessageBox.Show("Username đã tồn tại!");
-                return;
-            }
-            FirebaseResponse response = await client.SetAsync("users/" + username, userData);
+            
+            FirebaseResponse response = await client.SetAsync("Users/" + userData.username, userData);
 
             currentUserId++;
 
@@ -81,10 +84,10 @@ namespace login_register
         }
         private bool IsValidSignUp(string username, string password)
         {
-            // Kiểm tra tính hợp lệ của thông tin đăng ký
-            // ...
-            if (password != txtComPass.Text || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username))
+            
+            if (cmbGender.SelectedIndex == -1 || password != txtComPass.Text || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(realname.Text) || string.IsNullOrEmpty(birth.Text.ToString()) || string.IsNullOrEmpty( txtComPass.Text) )
             {
+               
                 return false; 
             }
             else return true;
