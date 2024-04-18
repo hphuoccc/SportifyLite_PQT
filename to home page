@@ -1,0 +1,22 @@
+// Biến tạm thời để lưu thông tin đăng nhập
+private static string loggedInUsername;
+
+// Lưu thông tin đăng nhập vào biến tạm thời
+loggedInUsername = username;
+protected override void OnLoad(EventArgs e)
+{
+    base.OnLoad(e);
+
+    // Kiểm tra xem người dùng đã đăng nhập hay chưa
+    if (string.IsNullOrEmpty(Login.loggedInUsername))
+    {
+       
+        
+        this.Close();
+    }
+    else
+    {
+        // Người dùng đã đăng nhập, tiếp tục hiển thị nội dung của form Home.cs
+        // ...
+    }
+}
